@@ -109,19 +109,19 @@
 }
 /* ticketCount */
 .ticket_count {
-  position: relative;
+  position: absolute;
   display: inline-block;
   top: 225px;
   left: 450px;
   color: #ffdf2e;
-}
-#ticket_count_num {
-  font-size: 26px;
   p {
     display: inline-block;
     color: #fff;
     font-size: 1rem;
   }
+}
+#ticket_count_num {
+  font-size: 26px;
 }
 .ticket_change {
   position: absolute;
@@ -131,11 +131,12 @@
   background-repeat: no-repeat;
   cursor: pointer;
 }
-.start_roullte {
+.start_roulette {
   position: absolute;
   top: 330px;
   left: 320px;
-  img {
-    cursor: pointer;
-  }
+  cursor: pointer;
+  // img {
+    
+  // }
 }
