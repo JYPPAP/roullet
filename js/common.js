@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ==========================================*/
   function rouletteAct(randomNum, itemNum) {
     for ( let i=0; i<randomNum; i++ ) {
-      if (i < (randomNum - 10)) {
+      if (i < (21)) {
         /* 이미지 보이게 */
         setTimeout(() => {
           itemRoulette[(i % 14)].style.opacity = "1";
