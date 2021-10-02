@@ -2,50 +2,94 @@ document.addEventListener("DOMContentLoaded", () => {
   let ticketCount = 10;
   let randomNum;
   let itemNum;
+  let openWin;
   let clickFlag = false;
   const startBtn = document.querySelector('.start_roulette');
   const ticketChange = document.querySelector('.ticket_change');
   const itemRoulette = document.getElementsByClassName('item_image');
 
-  function noMoreTicket(ticketCount) {
-    console.log("-----------------------------");
-    console.log("응모권이 부족!할 때 출력될 로그");
-    console.log("Ticket 이 없습니다.");
-    console.log("현재 티켓의 갯수: " + ticketCount);
+  /* 상품번호를 인덱스에 맞춰서 배열로 저장 */
+  const itemSelect = [
+    "3,000", "1,000,000", "", "100,000", "5,000", "2,000", "300,000", "", "30,000", "50,000", "10,000", "", "1,000", "500,000"
+  ];
+
+  /*===========================
+          팝업창 호출
+  ===========================*/
+  function popup() {
+    const url = "../popup.html";
+    const options = "scrollbars=no, width=386, height=294, top=200px, left=200px, location=no, toolbars=no, status=no, resizable=no";
+    window.name = "roulette";
+    openWin = window.open(url, "windowPopup", options);
   }
 
-  function rouletteAct(randomNum, itemNum) {
-    /* 이 안에 룰렛관련 동작을 넣고 아래에서 호출. */
-    console.log("-----------------------------");
-    console.log("룰렛을 돌릴 때 출력될 로그");
-    console.log("난수: " + randomNum);
-    console.log("상품 번호: " + itemNum);
+  /*===========================
+        팝업창 값 설정
+  ===========================*/
+  function setPopText(itemNum) {
+    /* 0.1초 후에 값이 적용될 수 있도록 생성 */
+    setTimeout(() => {
+      openWin.document.getElementById('ok_text').innerHTML = itemSelect[itemNum];  
+    }, 100);
+  }
 
+  /*===========================
+  응모권이 없을 때 실행될 함수
+  ===========================*/
+  function noMoreTicket() {
+    /* 응모권 관련 알림은 일단 이것으로 처리. */
+    alert(
+      "응모권이 부족합니다!",
+      "응모권을 모으신 후 다시 도전해주세요."
+    );
+  }
+
+  /*=========================================
+  룰렛을 돌릴 때 실행될 함수 (애니메이션 용)
+  ==========================================*/
+  function rouletteAct(randomNum, itemNum) {
     for ( let i=0; i<randomNum; i++ ) {
-      /* 이미지 보이게 */
-      setTimeout(() => {
-        itemRoulette[(i % 14)].style.opacity = "1";
-      }, i*100);
-      /* 이미지 안보이게 */
-      setTimeout(() => {
-        itemRoulette[(i % 14)].style.opacity = "0";
-      }, (i*100) + 200);
+      if (i < (randomNum - 10)) {
+        /* 이미지 보이게 */
+        setTimeout(() => {
+          itemRoulette[(i % 14)].style.opacity = "1";
+        }, (i*100 + (i*i*2)));
+        /* 이미지 안보이게 */
+        setTimeout(() => {
+          itemRoulette[(i % 14)].style.opacity = "0";
+        }, (i*100 + (i*i*2)) + 250);
+      } else {
+        /* 후반부에 약간 느려지게. */
+        /* 이미지 보이게 */
+        setTimeout(() => {
+          itemRoulette[(i % 14)].style.opacity = "1";
+        }, (i*100 + (i*i*3) - 100));
+        /* 이미지 안보이게 */
+        setTimeout(() => {
+          itemRoulette[(i % 14)].style.opacity = "0";
+        }, (i*100 + (i*i*3)) + (500 + i));
+      }
     }
     /* 마지막 이미지 출력 */
     setTimeout(() => {
       itemRoulette[(itemNum)].style.opacity = "1";
-    }, (randomNum*100) + 250);
+    }, (randomNum*100 + (randomNum*randomNum*3)));
 
-    /* 중복클릭 초기화 */
+    /* 팝업창 띄우고 중복클릭 초기화 */
     setTimeout(() => {
+      /* 중복클릭 초기화 */
       clickFlag = false;
-    }, (randomNum*100) + 1250);
+
+      return clickFlag, popup(), setPopText(itemNum);
+    }, (randomNum*100 + (randomNum*randomNum*3)) + 1000);
   }
 
   /* 티켓 갯수를 HTML에 출력하기 위한 코드 */
   document.getElementById('ticket_count_num').innerHTML = ticketCount;
 
-  /* 중복클릭 차단 */
+  /*===========================
+          중복클릭 차단
+  ===========================*/
   /*
   초기값이 false로 저장되어 있고 
     초기값이 clickCheck 함수를 실행하면 true로 변경된다.
@@ -68,10 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
   룰렛 애니메이션?을 실행할 수 있는 함수를 리턴.
    */
   startBtn.onclick = e => {
-    console.log("=============================");
-    console.log("StartBtn is Click");
-
-    /* 중복실행 방지용 코드 */
+    /*===========================
+        중복실행 방지용 코드
+    ===========================*/
     /* 값이 참이면 여기서 끝난다.
     값이 거짓이면 아래 코드로 넘어간다. */
     if(clickCheck()){return;}
@@ -81,15 +124,21 @@ document.addEventListener("DOMContentLoaded", () => {
       itemRoulette[(i % 14)].style.opacity = "0";
     }
     // console.log(ticketCount);
-    /* 티켓유무 판단 */
+    /*===========================
+            티켓유무 판단
+    ===========================*/
     let ticketCheck = ticketCount > 0 ? true : false;
 
-    /* 티켓이 없을 경우 */
+    /*===========================
+          티켓이 없을 경우
+    ===========================*/
     if(!ticketCheck) {
-      return clickFlag, noMoreTicket(ticketCount);
+      return clickFlag, noMoreTicket();
     }
 
-    /* 티켓이 1개 이상 있는 경우. */
+    /*===========================
+      티켓이 1개 이상 있는 경우.
+    ===========================*/
     if(ticketCheck) {
       /* 티켓 갯수를 줄이고 출력 */
       ticketCount--;
@@ -103,4 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return clickFlag, ticketCount, rouletteAct(randomNum, itemNum);
     }
   }
+
+
 });
