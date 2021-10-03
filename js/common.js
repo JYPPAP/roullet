@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
           팝업창 호출
   ===========================*/
   function popup() {
-    const url = "../popup.html";
-    const options = "scrollbars=no, width=386, height=294, top=200px, left=200px, location=no, toolbars=no, status=no, resizable=no";
+    const url = "popup.html";
+    const options = "width=386, height=294, top=200px, left=200px, location=no, toolbars=no, status=no, resizable=no, scrollbars=no";
     window.name = "roulette";
     openWin = window.open(url, "windowPopup", options);
   }
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function setPopText(itemNum) {
     /* 0.1초 후에 값이 적용될 수 있도록 생성 */
     setTimeout(() => {
-      openWin.document.getElementById('ok_text').innerHTML = itemSelect[itemNum];  
+      openWin.document.getElementById('ok_text').innerHTML = itemSelect[itemNum];
     }, 100);
   }
 
