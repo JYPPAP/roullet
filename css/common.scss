@@ -166,27 +166,29 @@ body {
 
     .content_image {
       height: 153px;
-      background-image: url(../images/pop_02_sorry.jpg);
+      background-image: url(../images/pop_01_ok.jpg);
       .text_wrap {
+        position: absolute;
+        width: 100%;
+        top: 150px;
+        font-weight: bold;
+        display: block;
+        text-align: center;
         font-size: 15px;
         font-family: 'dotum';
         color: #fbce2a;
         b, p {
-          display: none;
+          position: relative;
+          display: inline-block;
         }
       }
-      &.ok {
-        background-image: url(../images/pop_01_ok.jpg);
+
+      &.sorry {
+        background-image: url(../images/pop_02_sorry.jpg);
         .text_wrap {
-          position: absolute;
-          width: 100%;
-          top: 150px;
-          font-weight: bold;
-          display: block;
-          text-align: center;
+          
           b, p {
-            position: relative;
-            display: inline-block;
+            display: none;
           }
         }
       }
